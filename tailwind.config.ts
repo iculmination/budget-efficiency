@@ -18,6 +18,14 @@ export default {
           "300": "#F2F5F9",
           "400": "#F2F4F8",
         },
+        brand: {
+          50: "#e6ffff",
+          100: "#ccfeff",
+          200: "#b3feff",
+          300: "#99fdff",
+          400: "#80fdff",
+          500: "#33fcff",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

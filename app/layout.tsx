@@ -17,7 +17,9 @@ export default function RootLayout({ children }: LayoutProps) {
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${rubikSans.variable} antialiased`}>{children}</body>
+        <body className={`${rubikSans.variable} antialiased bg-gray-100`}>
+          {children}
+        </body>
       </html>
     </ClerkProvider>
   );
