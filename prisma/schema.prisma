@@ -1,10 +1,14 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id       String @id @default(auto())
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
   username String @unique
   email    String @unique
   age      Int
@@ -18,13 +22,14 @@ model User {
 
   recurringExpenses RecurringExpense[]
 
-  transactions Transaction[] @relation(fields: [id], references: [userId])
+  transactions String[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
+  Transaction  Transaction[]
 }
 
 model PercentageGoal {
-  id         String @id @default(auto())
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
   userId     String @unique
   percentage Float
   sum        Float
@@ -33,7 +38,7 @@ model PercentageGoal {
 }
 
 model DreamGoal {
-  id       String   @id @default(auto())
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
   userId   String
   name     String
   sum      Float
@@ -43,7 +48,7 @@ model DreamGoal {
 }
 
 model RecurringExpense {
-  id              String   @id @default(auto())
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
   userId          String
   name            String
   amount          Float
@@ -54,7 +59,7 @@ model RecurringExpense {
 // -------------------------------------------------------------------------------
 
 model Transaction {
-  id          String   @id @default(auto())
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   userId      String
   type        String
   category    String
@@ -68,7 +73,7 @@ model Transaction {
 // -------------------------------------------------------------------------------
 
 model AppData {
-  id         String   @id @default(auto())
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   categories String[]
   sources    String[]
 }
