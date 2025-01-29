@@ -1,0 +1,74 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String @id @default(auto())
+  username String @unique
+  email    String @unique
+  age      Int
+  currency String
+
+  income  Float
+  savings Float?
+
+  percentageGoal PercentageGoal?
+  dreamGoals     DreamGoal[]
+
+  recurringExpenses RecurringExpense[]
+
+  transactions Transaction[] @relation(fields: [id], references: [userId])
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model PercentageGoal {
+  id         String @id @default(auto())
+  userId     String @unique
+  percentage Float
+  sum        Float
+  progress   Float
+  user       User   @relation(fields: [userId], references: [id])
+}
+
+model DreamGoal {
+  id       String   @id @default(auto())
+  userId   String
+  name     String
+  sum      Float
+  progress Float
+  date     DateTime
+  user     User     @relation(fields: [userId], references: [id])
+}
+
+model RecurringExpense {
+  id              String   @id @default(auto())
+  userId          String
+  name            String
+  amount          Float
+  nextPaymentDate DateTime
+  user            User     @relation(fields: [userId], references: [id])
+}
+
+// -------------------------------------------------------------------------------
+
+model Transaction {
+  id          String   @id @default(auto())
+  userId      String
+  type        String
+  category    String
+  source      String?
+  amount      Float
+  date        DateTime
+  description String?
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+// -------------------------------------------------------------------------------
+
+model AppData {
+  id         String   @id @default(auto())
+  categories String[]
+  sources    String[]
+}
