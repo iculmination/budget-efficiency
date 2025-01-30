@@ -12,9 +12,9 @@ const Sidebar = () => {
   const user = useUser();
 
   return (
-    <aside className="overflow-hidden w-[440px]">
+    <aside className="overflow-hidden w-[27.5rem]">
       <ScrollArea className="hidden w-full h-screen p-3 lg:block">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 drop-shadow-md">
           <nav className="">
             <ul className="rounded-xl bg-white w-full p-4">
               <Link href="/">
@@ -44,11 +44,12 @@ const Sidebar = () => {
             </ul>
           </nav>
 
-          <div className="rounded-xl bg-white w-full h-80 p-6">
-            <h4 className="h4 flex items-center gap-2">
-              <UserButton />
-              {user.user?.username}
-            </h4>
+          <div className="rounded-xl bg-white w-full p-6 flex items-center gap-2 lg:gap-4">
+            <UserButton />
+            <p className="subtitle-1 text-right truncate max-w-[16rem] cursor-default">
+              Authorized as
+              <b> {user.user?.username}</b>
+            </p>
           </div>
           <div className="rounded-xl bg-white w-full h-80"></div>
           <div className="rounded-xl bg-white w-full h-80"></div>

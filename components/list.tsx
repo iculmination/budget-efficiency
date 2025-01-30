@@ -9,7 +9,11 @@ const ListItem = () => {
         <p className="subtitle-1 w-20">200</p>
         <p className="subtitle-1 line-clamp-1">salary</p>
       </div>
-      <Button className="size-8" variant="ghost" type="button">
+      <Button
+        className="size-8 hover:shadow-none"
+        variant="ghost"
+        type="button"
+      >
         <X />
       </Button>
     </li>

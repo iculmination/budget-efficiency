@@ -23,10 +23,7 @@ const RootPage = () => {
         <div className="flex justify-center gap-4">
           <SignedOut>
             <SignInButton>
-              <Button
-                className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white shadow-md"
-                size="lg"
-              >
+              <Button className="px-6 py-3shadow-md" size="lg">
                 Get Started
               </Button>
             </SignInButton>
@@ -34,7 +31,8 @@ const RootPage = () => {
           <SignedIn>
             <Link href="/main">
               <Button
-                className="px-6 py-3 bg-gray-800 hover:bg-gray-900 text-white shadow-md"
+                variant="secondary"
+                className="px-6 py-3 shadow-md"
                 size="lg"
               >
                 Go to Dashboard

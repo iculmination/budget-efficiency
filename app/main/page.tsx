@@ -1,3 +1,4 @@
+import { PieChartComponent } from "@/components/charts/pie-chart";
 import { Button } from "@/components/ui/button";
 import { getCurrentUser } from "@/lib/actions/user.actions";
 
@@ -16,14 +17,9 @@ const MainPage = async () => {
 
         <div className=""></div>
 
-        <div className="col-span-2 p-6">
-          <h2 className="text-lg font-bold text-gray-700">
-            Expenses Breakdown
-          </h2>
-          <div className="w-full h-40 bg-gray-200 rounded-xl flex items-center justify-center">
-            🥧 Pie Chart Placeholder
-          </div>
-        </div>
+        
+          <PieChartComponent />
+
 
         <div className="p-6">
           <h2 className="text-lg font-bold text-gray-700">Budget</h2>
@@ -53,9 +49,7 @@ const MainPage = async () => {
 
         <div className="bg-white shadow-md rounded-xl p-6">
           <h2 className="text-lg font-bold text-gray-700">Quick Actions</h2>
-          <Button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-xl w-full">
-            + Add Expense
-          </Button>
+          <Button className="mt-4 w-full">+ Add Expense</Button>
         </div>
 
         <div className="bg-white shadow-md rounded-xl p-6">
@@ -97,12 +91,10 @@ const MainPage = async () => {
 
         <div className="bg-white shadow-md rounded-xl p-6">
           <h2 className="text-lg font-bold text-gray-700">Settings</h2>
-          <Button className="mt-4 px-4 py-2 bg-gray-300 text-gray-700 rounded-xl w-full">
+          <Button className="mt-4 w-full" variant="secondary">
             ⚙️ Configure
           </Button>
-          <Button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-xl w-full">
-            📥 Export Data
-          </Button>
+          <Button className="mt-2 w-full">📥 Export Data</Button>
         </div>
       </div>
     </main>
