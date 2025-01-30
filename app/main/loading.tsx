@@ -1,9 +1,9 @@
-import { Loader } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 
 const Loading = () => {
   return (
     <div className="w-full h-screen flex items-center justify-center">
-      <Loader className="animate-spin" />
+      <LoaderCircle className="animate-spin" />
     </div>
   );
 };

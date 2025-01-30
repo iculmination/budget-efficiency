@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { currencies } from "@/constants";
+import { List } from "./list";
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -32,6 +33,16 @@ const formSchema = z.object({
   email: z.string().email(),
   age: z.coerce.number().int().lte(199).positive(),
   currency: z.string().min(1),
+  income: z.coerce.number().int().nonnegative(),
+  savings: z.coerce.number().int().nonnegative(),
+  percentageGoal: z.coerce.number().int().lte(100).positive(),
+  dreamGoal: z.object({
+    name: z.string().min(1, "Goal name is required"),
+    amount: z.coerce.number().int().nonnegative(),
+    deadline: z.coerce.date().refine((date) => date > new Date(), {
+      message: "Deadline must be in the future",
+    }),
+  }),
 });
 
 const Settings = () => {
@@ -42,6 +53,14 @@ const Settings = () => {
       email: "",
       age: 20,
       currency: "uah",
+      income: 0,
+      savings: 0,
+      percentageGoal: 0,
+      dreamGoal: {
+        name: "",
+        amount: 0,
+        deadline: new Date(),
+      },
     },
   });
 
@@ -61,7 +80,7 @@ const Settings = () => {
         >
           <div className="bg-white shadow-md rounded-xl p-6">
             <h2 className="h2">Account</h2>
-            <div className="flex flex-col gap- mt-6">
+            <div className="flex flex-col gap-6 mt-6">
               <FormField
                 control={form.control}
                 name="username"
@@ -72,7 +91,7 @@ const Settings = () => {
                       <Input placeholder="" {...field} />
                     </FormControl>
                     <FormDescription>
-                      This is your public display name.
+                      This is your display name.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -143,18 +162,18 @@ const Settings = () => {
           </div>
           <div className="bg-white shadow-md rounded-xl p-6">
             <h2 className="h2">Finances</h2>
-            <div className="flex flex-col gap- mt-6">
+            <div className="flex flex-col gap-6 mt-6">
               <FormField
                 control={form.control}
-                name="username"
+                name="income"
                 render={({ field }) => (
                   <FormItem className="">
-                    <FormLabel>Username</FormLabel>
+                    <FormLabel>Income</FormLabel>
                     <FormControl>
-                      <Input placeholder="" {...field} />
+                      <Input placeholder="" type="number" {...field} />
                     </FormControl>
                     <FormDescription>
-                      This is your public display name.
+                      This is your average income.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -162,47 +181,49 @@ const Settings = () => {
               />
               <FormField
                 control={form.control}
-                name="username"
+                name="savings"
                 render={({ field }) => (
                   <FormItem className="">
-                    <FormLabel>Username</FormLabel>
+                    <FormLabel>Savings (optional)</FormLabel>
                     <FormControl>
-                      <Input placeholder="" {...field} />
+                      <Input placeholder="" type="number" {...field} />
                     </FormControl>
                     <FormDescription>
-                      This is your public display name.
+                      This is your actual savings.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="username"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Username</FormLabel>
-                    <FormControl>
-                      <Input placeholder="" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      This is your public display name.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="">
+                <List />
+                <FormDescription>
+                  Here is a list of your outgoings.
+                </FormDescription>
+              </div>
+              <div className="">
+                <List />
+                <FormDescription>
+                  Here is a list of your incomes.
+                </FormDescription>
+              </div>
+              <div className="">
+                <List />
+                <FormDescription>
+                  Here is a list of your regular payments.
+                </FormDescription>
+              </div>
             </div>
           </div>
           <div className="bg-white shadow-md rounded-xl p-6">
             <h2 className="h2">Goals</h2>
-            <div className="flex flex-col gap- mt-6">
+            <div className="flex flex-col gap-6 mt-6">
               <FormField
                 control={form.control}
                 name="username"
                 render={({ field }) => (
                   <FormItem className="">
-                    <FormLabel>Username</FormLabel>
+                    <FormLabel>Percentage goal, %</FormLabel>
                     <FormControl>
                       <Input placeholder="" {...field} />
                     </FormControl>
@@ -215,32 +236,50 @@ const Settings = () => {
               />
               <FormField
                 control={form.control}
-                name="username"
+                name="dreamGoal.name"
                 render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Username</FormLabel>
+                  <FormItem>
+                    <FormLabel>Main goal name</FormLabel>
                     <FormControl>
                       <Input placeholder="" {...field} />
                     </FormControl>
-                    <FormDescription>
-                      This is your public display name.
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
-                name="username"
+                name="dreamGoal.amount"
                 render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Username</FormLabel>
+                  <FormItem>
+                    <FormLabel>Main goal amount</FormLabel>
                     <FormControl>
-                      <Input placeholder="" {...field} />
+                      <Input type="number" placeholder="" {...field} />
                     </FormControl>
-                    <FormDescription>
-                      This is your public display name.
-                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="dreamGoal.deadline"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Deadline</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="date"
+                        {...field}
+                        value={
+                          field.value
+                            ? new Date(field.value).toISOString().split("T")[0]
+                            : ""
+                        }
+                        onChange={(e) => field.onChange(e.target.value)}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
