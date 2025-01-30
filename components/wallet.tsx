@@ -1,4 +1,4 @@
-const Wallet = () => {
+const Wallet = async () => {
   return <div>Wallet</div>;
 };
 

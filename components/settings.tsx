@@ -64,8 +64,18 @@ const Settings = () => {
     },
   });
 
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isSubmitting, isDirty, isValid },
+  } = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+  });
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    if (isDirty) {
+      console.log(values);
+    }
   }
 
   return (
@@ -157,7 +167,9 @@ const Settings = () => {
                   </FormItem>
                 )}
               />
-              <Button type="submit">Submit</Button>
+              <Button type="submit" disabled={isSubmitting}>
+                Submit
+              </Button>
             </div>
           </div>
           <div className="bg-white shadow-md rounded-xl p-6">

@@ -5,9 +5,11 @@ import { ScrollArea } from "./ui/scroll-area";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
+import { UserButton, useUser } from "@clerk/nextjs";
 
 const Sidebar = () => {
   const pathname = usePathname();
+  const user = useUser();
 
   return (
     <aside className="overflow-hidden w-[440px]">
@@ -15,6 +17,12 @@ const Sidebar = () => {
         <div className="flex flex-col gap-2">
           <nav className="">
             <ul className="rounded-xl bg-white w-full p-4">
+              <Link href="/">
+                <h2 className="text-2xl font-bold tracking-tight cursor-pointer p-2">
+                  <span className="text-blue-600">Budget</span>
+                  Master
+                </h2>
+              </Link>
               {navItems.map((item) => {
                 const Icon = item.icon;
                 return (
@@ -36,7 +44,12 @@ const Sidebar = () => {
             </ul>
           </nav>
 
-          <div className="rounded-xl bg-white w-full h-80"></div>
+          <div className="rounded-xl bg-white w-full h-80 p-6">
+            <h4 className="h4 flex items-center gap-2">
+              <UserButton />
+              {user.user?.username}
+            </h4>
+          </div>
           <div className="rounded-xl bg-white w-full h-80"></div>
           <div className="rounded-xl bg-white w-full h-80"></div>
           <div className="rounded-xl bg-white w-full h-80"></div>

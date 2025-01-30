@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { getCurrentUser } from "@/lib/actions/user.actions";
 
 const MainPage = async () => {
@@ -52,9 +53,9 @@ const MainPage = async () => {
 
         <div className="bg-white shadow-md rounded-xl p-6">
           <h2 className="text-lg font-bold text-gray-700">Quick Actions</h2>
-          <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-xl w-full">
+          <Button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-xl w-full">
             + Add Expense
-          </button>
+          </Button>
         </div>
 
         <div className="bg-white shadow-md rounded-xl p-6">
@@ -96,12 +97,12 @@ const MainPage = async () => {
 
         <div className="bg-white shadow-md rounded-xl p-6">
           <h2 className="text-lg font-bold text-gray-700">Settings</h2>
-          <button className="mt-4 px-4 py-2 bg-gray-300 text-gray-700 rounded-xl w-full">
+          <Button className="mt-4 px-4 py-2 bg-gray-300 text-gray-700 rounded-xl w-full">
             ⚙️ Configure
-          </button>
-          <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-xl w-full">
+          </Button>
+          <Button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-xl w-full">
             📥 Export Data
-          </button>
+          </Button>
         </div>
       </div>
     </main>
