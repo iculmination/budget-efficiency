@@ -14,7 +14,7 @@ const Sidebar = () => {
       <ScrollArea className="hidden w-full h-screen p-3 lg:block">
         <div className="flex flex-col gap-2">
           <nav className="">
-            <ul className="rounded-lg bg-white w-full p-4">
+            <ul className="rounded-xl bg-white w-full p-4">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 return (
@@ -22,8 +22,9 @@ const Sidebar = () => {
                     <Link
                       href={item.href}
                       className={cn(
-                        "flex justify-between items-center px-4 py-4 rounded-lg",
-                        item.href === pathname && "bg-blue-500 text-white"
+                        "flex justify-between items-center px-4 py-4 rounded-xl hover:shadow-md hover:scale-105 transition",
+                        item.href === pathname &&
+                          "bg-blue-500 text-white drop-shadow-lg"
                       )}
                     >
                       <h4 className="h4">{item.name}</h4>
@@ -35,10 +36,10 @@ const Sidebar = () => {
             </ul>
           </nav>
 
-          <div className="rounded-lg bg-white w-full h-80"></div>
-          <div className="rounded-lg bg-white w-full h-80"></div>
-          <div className="rounded-lg bg-white w-full h-80"></div>
-          <div className="rounded-lg bg-white w-full h-80"></div>
+          <div className="rounded-xl bg-white w-full h-80"></div>
+          <div className="rounded-xl bg-white w-full h-80"></div>
+          <div className="rounded-xl bg-white w-full h-80"></div>
+          <div className="rounded-xl bg-white w-full h-80"></div>
         </div>
       </ScrollArea>
     </aside>
