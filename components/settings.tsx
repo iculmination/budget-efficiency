@@ -25,6 +25,9 @@ import {
 } from "./ui/select";
 import { currencies } from "@/constants";
 import { List } from "./list";
+import { LoaderCircle } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
+import { updateUser } from "@/lib/actions/user.actions";
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -46,6 +49,8 @@ const formSchema = z.object({
 });
 
 const Settings = () => {
+  const { user } = useUser();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -72,11 +77,22 @@ const Settings = () => {
     resolver: zodResolver(formSchema),
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    if (isDirty) {
-      console.log(values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log(values);
+
+    try {
+      await user?.update({
+        username: values.username,
+      });
+
+      await updateUser({
+        ...user,
+        username: values.username,
+      });
+    } catch (error) {
+      console.log(error, "Could not update user");
     }
-  }
+  };
 
   return (
     <main className="w-full flex flex-col flex-grow">
@@ -168,7 +184,11 @@ const Settings = () => {
                 )}
               />
               <Button type="submit" disabled={isSubmitting}>
-                Submit
+                {isSubmitting ? (
+                  <LoaderCircle className="animate-spin" />
+                ) : (
+                  "Submit"
+                )}
               </Button>
             </div>
           </div>
@@ -232,7 +252,7 @@ const Settings = () => {
             <div className="flex flex-col gap-6 mt-6">
               <FormField
                 control={form.control}
-                name="username"
+                name="percentageGoal"
                 render={({ field }) => (
                   <FormItem className="">
                     <FormLabel>Percentage goal, %</FormLabel>

@@ -87,22 +87,15 @@ export const PieChartComponent = () => {
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
+                          className="text-3xl font-bold"
                         >
                           {totalAmount.toLocaleString()}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
-                        >
-                          Expense
                         </tspan>
                       </text>
                     );
                   }
                 }}
-              />
+            />
             </Pie>
           </PieChart>
         </ChartContainer>

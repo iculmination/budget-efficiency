@@ -17,15 +17,13 @@ model User {
   income  Float
   savings Float?
 
-  percentageGoal PercentageGoal?
-  dreamGoals     DreamGoal[]
-
+  percentageGoal    PercentageGoal?
+  dreamGoals        DreamGoal[]
   recurringExpenses RecurringExpense[]
+  transactions      Transaction[]
 
-  transactions String[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  Transaction  Transaction[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model PercentageGoal {
