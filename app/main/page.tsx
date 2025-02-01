@@ -1,11 +1,7 @@
 import { PieChartComponent } from "@/components/charts/pie-chart";
 import { Button } from "@/components/ui/button";
-import { getCurrentUser } from "@/lib/actions/user.actions";
 
 const MainPage = async () => {
-  const user = await getCurrentUser();
-  console.log(user);
-
   return (
     <main className="w-full h-full">
       <div className="grid grid-cols-6 grid-rows-3 w-full h-full gap-6">
@@ -17,9 +13,7 @@ const MainPage = async () => {
 
         <div className=""></div>
 
-        
-          <PieChartComponent />
-
+        <PieChartComponent />
 
         <div className="p-6">
           <h2 className="text-lg font-bold text-gray-700">Budget</h2>

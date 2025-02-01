@@ -1,8 +1,11 @@
+"use client";
+
+import { useUserStore } from "@/zustand/store";
 
 const Budget = () => {
-  return (
-    <div>Budget</div>
-  )
-}
+  const user = useUserStore((state) => state.user);
 
-export default Budget
+  return <div>{JSON.stringify(user)}</div>;
+};
+
+export default Budget;

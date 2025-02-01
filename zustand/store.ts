@@ -1,13 +1,11 @@
-// import { create } from "zustand";
+import { create } from "zustand";
 
-// type UserStore = {
-//   username: string;
+interface UserState {
+  user: FullUser | null;
+  setUser: (userData: FullUser) => void;
+}
 
-// };
-
-// const useUserStore = create((set) => ({
-//   bears: 0,
-//   increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),
-//   removeAllBears: () => set({ bears: 0 }),
-//   updateBears: (newBears) => set({ bears: newBears }),
-// }));
+export const useUserStore = create<UserState>((set) => ({
+  user: null,
+  setUser: (userData) => set({ user: userData }),
+}));

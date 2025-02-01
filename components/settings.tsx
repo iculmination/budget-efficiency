@@ -4,6 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { useEffect } from "react";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -27,7 +29,8 @@ import { currencies } from "@/constants";
 import { List } from "./list";
 import { LoaderCircle } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
-import { updateUser } from "@/lib/actions/user.actions";
+import { updateUserData } from "@/lib/actions/user.actions";
+import { useUserStore } from "../zustand/store.ts";
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -50,6 +53,7 @@ const formSchema = z.object({
 
 const Settings = () => {
   const { user } = useUser();
+  const userStored = useUserStore((state) => state.user);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -69,24 +73,41 @@ const Settings = () => {
     },
   });
 
+  useEffect(() => {
+    if (userStored) {
+      form.reset({
+        username: userStored.username || "",
+        email: userStored.email || "",
+        age: userStored.age || 20,
+        currency: userStored.currency || "uah",
+        income: userStored.income || 0,
+        savings: userStored.savings ?? 0,
+        percentageGoal: userStored.percentageGoal?.percentage || 0,
+        dreamGoal: {
+          name: userStored.dreamGoals[0]?.name || "",
+          amount: userStored.dreamGoals[0]?.sum || 0,
+          deadline: userStored.dreamGoals[0]?.date
+            ? new Date(userStored.dreamGoals[0].date)
+            : new Date(),
+        },
+      });
+    }
+  }, [userStored, form.reset, form]);
+
   const {
-    handleSubmit,
-    register,
-    formState: { errors, isSubmitting, isDirty, isValid },
+    formState: { isSubmitting },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-
     try {
       await user?.update({
         username: values.username,
       });
 
-      await updateUser({
-        ...user,
+      await updateUserData({
+        ...values,
         username: values.username,
       });
     } catch (error) {

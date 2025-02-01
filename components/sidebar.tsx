@@ -32,7 +32,7 @@ const Sidebar = () => {
                       className={cn(
                         "flex justify-between items-center px-4 py-4 rounded-xl hover:shadow-md hover:scale-105 transition",
                         item.href === pathname &&
-                          "bg-blue-500 text-white drop-shadow-lg"
+                          "bg-blue-500 text-white drop-shadow-lg hover:bg-blue-700"
                       )}
                     >
                       <h4 className="h4">{item.name}</h4>
