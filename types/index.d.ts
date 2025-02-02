@@ -11,12 +11,13 @@ declare interface LayoutProps {
 declare interface ParamProps {
   params?: Promise<SegmentParams>;
 }
-declare interface FullUser extends User {
-  percentageGoal?: percentageGoal;
-  dreamGoals: DreamGoal[];
-  recurringExpenses: RecurringExpense[];
-  transactions: Transaction[];
-}
+
+// declare interface FullUser extends User {
+//   percentageGoal?: percentageGoal;
+//   dreamGoals: DreamGoal[];
+//   recurringExpenses: RecurringExpense[];
+//   transactions: Transaction[];
+// }
 
 declare interface SettingsFormItemProps {
   control: Control<FormValues>;
@@ -29,4 +30,23 @@ declare interface SettingsFormItemProps {
 declare interface ListProps {
   className?: string;
   description: string;
+}
+
+declare interface DreamGoal {
+  name: string;
+  sum: number;
+  date: Date;
+}
+
+declare interface FullUser {
+  id?: string;
+  username: string;
+  email: string;
+  age: number;
+  currency: string;
+  income: number;
+  percentageGoal: number | null;
+  savings?: number | null;
+  percentageGoal: number;
+  dreamGoal: DreamGoal | null;
 }

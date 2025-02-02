@@ -18,8 +18,8 @@ export const formSchema = z.object({
   percentageGoal: z.coerce.number().int().lte(100).positive(),
   dreamGoal: z.object({
     name: z.string().min(1, "Goal name is required"),
-    amount: z.coerce.number().int().nonnegative(),
-    deadline: z.coerce.date().refine((date) => date > new Date(), {
+    sum: z.coerce.number().int().nonnegative(),
+    date: z.coerce.date().refine((date) => date > new Date(), {
       message: "Deadline must be in the future",
     }),
   }),
@@ -40,8 +40,8 @@ export const useSettingsForm = () => {
       percentageGoal: 0,
       dreamGoal: {
         name: "",
-        amount: 0,
-        deadline: new Date(),
+        sum: 0,
+        date: new Date(),
       },
     },
   });
@@ -55,12 +55,12 @@ export const useSettingsForm = () => {
         currency: userStored.currency.toUpperCase(),
         income: userStored.income,
         savings: userStored.savings ?? 0,
-        percentageGoal: userStored.percentageGoal?.percentage,
+        percentageGoal: userStored.percentageGoal || 0,
         dreamGoal: {
-          name: userStored.dreamGoals[0]?.name,
-          amount: userStored.dreamGoals[0]?.sum,
-          deadline: userStored.dreamGoals[0]?.date
-            ? new Date(userStored.dreamGoals[0].date)
+          name: userStored.dreamGoal?.name,
+          sum: userStored.dreamGoal?.sum,
+          date: userStored.dreamGoal?.date
+            ? new Date(userStored.dreamGoal.date)
             : new Date(),
         },
       });

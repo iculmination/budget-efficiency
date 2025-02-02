@@ -30,11 +30,13 @@ import { formSchema, useSettingsForm } from "@/hooks/use-settings-form";
 import SettingsFormItem from "./form/settings-form-item";
 import SubmitButton from "./form/submit-button";
 import { useToast } from "@/hooks/use-toast";
+import { useUserStore } from "@/zustand/store";
 
 const Settings = () => {
   const { user } = useUser();
   const form = useSettingsForm();
   const { toast } = useToast();
+  const { setUser } = useUserStore();
 
   const {
     formState: { isSubmitting },
@@ -44,6 +46,7 @@ const Settings = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      console.log(values);
       await user?.update({
         username: values.username,
       });
@@ -52,6 +55,8 @@ const Settings = () => {
         ...values,
         username: values.username,
       });
+
+      setUser(values);
 
       toast({ description: "Your profile successfully updated." });
     } catch (error) {
@@ -179,13 +184,13 @@ const Settings = () => {
               <SettingsFormItem
                 control={form.control}
                 label="Main goal amount"
-                name="dreamGoal.amount"
+                name="dreamGoal.sum"
                 type="number"
                 description="This is how much your main goal costs."
               />
               <FormField
                 control={form.control}
-                name="dreamGoal.deadline"
+                name="dreamGoal.date"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Deadline</FormLabel>

@@ -3,6 +3,7 @@ import Savings from "@/components/savings";
 import Settings from "@/components/settings";
 import Transactions from "@/components/transactions";
 import Wallet from "@/components/wallet";
+import { ParamProps } from "@/types";
 import { notFound } from "next/navigation";
 
 const DynamicRoutePage = async ({ params }: ParamProps) => {

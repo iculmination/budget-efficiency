@@ -17,8 +17,8 @@ model User {
   income  Float
   savings Float?
 
-  percentageGoal    PercentageGoal?
-  dreamGoals        DreamGoal[]
+  percentageGoal    Float?
+  dreamGoal         DreamGoal?
   recurringExpenses RecurringExpense[]
   transactions      Transaction[]
 
@@ -26,18 +26,9 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
-model PercentageGoal {
-  id         String @id @default(auto()) @map("_id") @db.ObjectId
-  userId     String @unique
-  percentage Float
-  sum        Float
-  progress   Float
-  user       User   @relation(fields: [userId], references: [id])
-}
-
 model DreamGoal {
   id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId   String
+  userId   String   @unique
   name     String
   sum      Float
   progress Float

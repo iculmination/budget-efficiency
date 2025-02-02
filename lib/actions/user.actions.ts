@@ -3,6 +3,7 @@
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { prisma } from "../prisma";
 import { transformUserData } from "../utils";
+import { FullUser } from "@/types";
 
 export const getCurrentUser = async () => {
   const { userId } = await auth();
@@ -27,8 +28,7 @@ export const getUserData = async () => {
   const user = await prisma.user.findUnique({
     where: { id: userId },
     include: {
-      percentageGoal: true,
-      dreamGoals: true,
+      dreamGoal: true,
       recurringExpenses: true,
       transactions: true,
     },
@@ -41,22 +41,18 @@ export const getUserData = async () => {
   return user;
 };
 
-export const createUserData = async (data: FullUser) => {
+export const createUserData = async (values: FullUser) => {
   const { userId } = await auth();
 
   if (!userId) {
     throw new Error("Unauthorized");
   }
 
-  const { user, percentageGoal, dreamGoal } = transformUserData(data);
+  const { user, dreamGoal } = transformUserData(values);
 
   try {
     await prisma.user.create({
       data: { id: userId, ...user },
-    });
-
-    await prisma.percentageGoal.create({
-      data: { userId, ...percentageGoal },
     });
 
     await prisma.dreamGoal.create({
@@ -70,7 +66,7 @@ export const createUserData = async (data: FullUser) => {
   }
 };
 
-export const updateUserData = async (data: FullUser) => {
+export const updateUserData = async (values: FullUser) => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -80,31 +76,16 @@ export const updateUserData = async (data: FullUser) => {
   const existingUser = await prisma.user.findUnique({ where: { id: userId } });
 
   if (!existingUser) {
-    return createUserData(data);
+    return createUserData(values);
   }
 
-  const { user, percentageGoal, dreamGoal } = transformUserData(data);
+  const { user, dreamGoal } = transformUserData(values);
 
   try {
     await prisma.user.update({
       where: { id: userId },
       data: user,
     });
-
-    const existingPercentageGoal = await prisma.percentageGoal.findUnique({
-      where: { userId },
-    });
-
-    if (existingPercentageGoal) {
-      await prisma.percentageGoal.update({
-        where: { userId },
-        data: percentageGoal,
-      });
-    } else {
-      await prisma.percentageGoal.create({
-        data: { userId, ...percentageGoal },
-      });
-    }
 
     const existingDreamGoal = await prisma.dreamGoal.findFirst({
       where: { userId },

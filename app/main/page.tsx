@@ -1,7 +1,20 @@
+"use client";
+
 import { PieChartComponent } from "@/components/charts/pie-chart";
 import { Button } from "@/components/ui/button";
+import { useUserStore } from "@/zustand/store";
+import Loading from "./loading";
+import { currencies } from "@/constants";
 
 const MainPage = () => {
+  const data = useUserStore((state) => state.user);
+
+  if (!data) {
+    return <Loading />;
+  }
+
+  const currency = currencies.find((cur) => cur.code === data.currency);
+
   return (
     <main className="w-full h-full">
       <div className="grid grid-cols-6 grid-rows-3 w-full h-full gap-6">
@@ -17,7 +30,10 @@ const MainPage = () => {
 
         <div className="p-6">
           <h2 className="text-lg font-bold text-gray-700">Budget</h2>
-          <p className="text-2xl font-semibold text-green-500">$1,200</p>
+          <p className="text-2xl font-semibold text-green-500">
+            {currency?.symbol_native}
+            {data.savings}
+          </p>
           <p className="text-gray-500">Available funds</p>
         </div>
 

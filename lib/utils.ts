@@ -1,3 +1,4 @@
+import { FullUser } from "@/types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -13,20 +14,15 @@ export const transformUserData = (data: FullUser) => {
     currency: data.currency,
     income: data.income,
     savings: data.savings,
-  };
-
-  const percentageGoal = {
-    percentage: data.percentageGoal,
-    sum: (data.income * data.percentageGoal) / 100,
-    progress: 0,
+    percentageGoal: data.percentageGoal,
   };
 
   const dreamGoal = {
-    name: data.dreamGoal.name,
-    sum: data.dreamGoal.amount,
+    name: data.dreamGoal?.name || "",
+    sum: data.dreamGoal?.sum || 0,
     progress: 0,
-    date: data.dreamGoal.deadline,
+    date: data.dreamGoal?.date || new Date(),
   };
 
-  return { user, percentageGoal, dreamGoal };
+  return { user, dreamGoal };
 };
