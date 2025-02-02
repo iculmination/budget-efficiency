@@ -4,9 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { useEffect } from "react";
-
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -26,73 +23,18 @@ import {
   SelectValue,
 } from "./ui/select";
 import { currencies } from "@/constants";
-import { List } from "./list";
-import { LoaderCircle } from "lucide-react";
+import { List } from "./form/list";
 import { useUser } from "@clerk/nextjs";
 import { updateUserData } from "@/lib/actions/user.actions";
-import { useUserStore } from "../zustand/store.ts";
-
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  email: z.string().email(),
-  age: z.coerce.number().int().lte(199).positive(),
-  currency: z.string().min(1),
-  income: z.coerce.number().int().nonnegative(),
-  savings: z.coerce.number().int().nonnegative(),
-  percentageGoal: z.coerce.number().int().lte(100).positive(),
-  dreamGoal: z.object({
-    name: z.string().min(1, "Goal name is required"),
-    amount: z.coerce.number().int().nonnegative(),
-    deadline: z.coerce.date().refine((date) => date > new Date(), {
-      message: "Deadline must be in the future",
-    }),
-  }),
-});
+import { formSchema, useSettingsForm } from "@/hooks/use-settings-form";
+import SettingsFormItem from "./form/settings-form-item";
+import SubmitButton from "./form/submit-button";
+import { useToast } from "@/hooks/use-toast";
 
 const Settings = () => {
   const { user } = useUser();
-  const userStored = useUserStore((state) => state.user);
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: "",
-      email: "",
-      age: 20,
-      currency: "uah",
-      income: 0,
-      savings: 0,
-      percentageGoal: 0,
-      dreamGoal: {
-        name: "",
-        amount: 0,
-        deadline: new Date(),
-      },
-    },
-  });
-
-  useEffect(() => {
-    if (userStored) {
-      form.reset({
-        username: userStored.username || "",
-        email: userStored.email || "",
-        age: userStored.age || 20,
-        currency: userStored.currency || "uah",
-        income: userStored.income || 0,
-        savings: userStored.savings ?? 0,
-        percentageGoal: userStored.percentageGoal?.percentage || 0,
-        dreamGoal: {
-          name: userStored.dreamGoals[0]?.name || "",
-          amount: userStored.dreamGoals[0]?.sum || 0,
-          deadline: userStored.dreamGoals[0]?.date
-            ? new Date(userStored.dreamGoals[0].date)
-            : new Date(),
-        },
-      });
-    }
-  }, [userStored, form.reset, form]);
+  const form = useSettingsForm();
+  const { toast } = useToast();
 
   const {
     formState: { isSubmitting },
@@ -110,7 +52,13 @@ const Settings = () => {
         ...values,
         username: values.username,
       });
+
+      toast({ description: "Your profile successfully updated." });
     } catch (error) {
+      toast({
+        description: "Could not update user",
+        variant: "destructive",
+      });
       console.log(error, "Could not update user");
     }
   };
@@ -125,56 +73,26 @@ const Settings = () => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="grid grid-cols-3 grid-rows-1 w-full gap-6 flex-grow"
         >
-          <div className="bg-white shadow-md rounded-xl p-6">
+          <div className="bg-white shadow-md rounded-xl p-6 relative">
             <h2 className="h2">Account</h2>
             <div className="flex flex-col gap-6 mt-6">
-              <FormField
+              <SettingsFormItem
                 control={form.control}
+                label="Username"
                 name="username"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Username</FormLabel>
-                    <FormControl>
-                      <Input placeholder="" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      This is your display name.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                description="This is your display name."
               />
-              <FormField
+              <SettingsFormItem
                 control={form.control}
+                label="Email"
                 name="email"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      This is your public display name.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                description="This is your email."
               />
-              <FormField
+              <SettingsFormItem
                 control={form.control}
+                label="Age"
                 name="age"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Age</FormLabel>
-                    <FormControl>
-                      <Input placeholder="" type="number" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      This is your public display name.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                description="This is your age."
               />
               <FormField
                 control={form.control}
@@ -182,7 +100,10 @@ const Settings = () => {
                 render={({ field }) => (
                   <FormItem className="">
                     <FormLabel>Currency</FormLabel>
-                    <Select onValueChange={field.onChange}>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value || form.getValues("currency")}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select type" />
@@ -204,71 +125,33 @@ const Settings = () => {
                   </FormItem>
                 )}
               />
-              <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? (
-                  <LoaderCircle className="animate-spin" />
-                ) : (
-                  "Submit"
-                )}
-              </Button>
             </div>
+            <SubmitButton isSubmitting={isSubmitting} />
           </div>
-          <div className="bg-white shadow-md rounded-xl p-6">
+          <div className="bg-white shadow-md rounded-xl p-6 relative">
             <h2 className="h2">Finances</h2>
             <div className="flex flex-col gap-6 mt-6">
-              <FormField
+              <SettingsFormItem
                 control={form.control}
+                label="Income"
                 name="income"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Income</FormLabel>
-                    <FormControl>
-                      <Input placeholder="" type="number" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      This is your average income.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                type="number"
+                description="This is your average income."
               />
-              <FormField
+              <SettingsFormItem
                 control={form.control}
+                label="Savings (optional)"
                 name="savings"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Savings (optional)</FormLabel>
-                    <FormControl>
-                      <Input placeholder="" type="number" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      This is your actual savings.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                type="number"
+                description="This is your actual savings."
               />
-              <div className="">
-                <List />
-                <FormDescription>
-                  Here is a list of your outgoings.
-                </FormDescription>
-              </div>
-              <div className="">
-                <List />
-                <FormDescription>
-                  Here is a list of your incomes.
-                </FormDescription>
-              </div>
-              <div className="">
-                <List />
-                <FormDescription>
-                  Here is a list of your regular payments.
-                </FormDescription>
-              </div>
+              <List description="Here is a list of your outgoings." />
+              <List description="Here is a list of your incomes." />
+              <List description="Here is a list of your regular payments." />
             </div>
+            <SubmitButton isSubmitting={isSubmitting} />
           </div>
-          <div className="bg-white shadow-md rounded-xl p-6">
+          <div className="bg-white shadow-md rounded-xl p-6 relative">
             <h2 className="h2">Goals</h2>
             <div className="flex flex-col gap-6 mt-6">
               <FormField
@@ -287,34 +170,19 @@ const Settings = () => {
                   </FormItem>
                 )}
               />
-              <FormField
+              <SettingsFormItem
                 control={form.control}
+                label="Main goal name"
                 name="dreamGoal.name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Main goal name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                description="This is your goal's name."
               />
-
-              <FormField
+              <SettingsFormItem
                 control={form.control}
+                label="Main goal amount"
                 name="dreamGoal.amount"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Main goal amount</FormLabel>
-                    <FormControl>
-                      <Input type="number" placeholder="" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                type="number"
+                description="This is how much your main goal costs."
               />
-
               <FormField
                 control={form.control}
                 name="dreamGoal.deadline"
@@ -338,6 +206,7 @@ const Settings = () => {
                 )}
               />
             </div>
+            <SubmitButton isSubmitting={isSubmitting} />
           </div>
         </form>
       </Form>

@@ -1,7 +1,7 @@
 import { PieChartComponent } from "@/components/charts/pie-chart";
 import { Button } from "@/components/ui/button";
 
-const MainPage = async () => {
+const MainPage = () => {
   return (
     <main className="w-full h-full">
       <div className="grid grid-cols-6 grid-rows-3 w-full h-full gap-6">

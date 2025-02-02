@@ -11,6 +11,7 @@ const Sidebar = () => {
   const pathname = usePathname();
   const user = useUser();
 
+
   return (
     <aside className="overflow-hidden w-[27.5rem]">
       <ScrollArea className="hidden w-full h-screen p-3 lg:block">

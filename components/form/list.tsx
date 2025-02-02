@@ -1,6 +1,8 @@
 import { X } from "lucide-react";
-import { Button } from "./ui/button";
-import { ScrollArea } from "./ui/scroll-area";
+import { Button } from "../ui/button";
+import { ScrollArea } from "../ui/scroll-area";
+import { FormDescription } from "../ui/form";
+import { ListProps } from "@/types";
 
 const ListItem = () => {
   return (
@@ -20,13 +22,16 @@ const ListItem = () => {
   );
 };
 
-const List = () => {
+const List = ({ className, description }: ListProps) => {
   return (
-    <ScrollArea className="h-40 border rounded-lg mb-2">
-      <ul className="w-full">
-        <ListItem />
-      </ul>
-    </ScrollArea>
+    <div className={className}>
+      <ScrollArea className="h-40 border rounded-lg mb-2">
+        <ul className="w-full">
+          <ListItem />
+        </ul>
+      </ScrollArea>
+      <FormDescription>{description}</FormDescription>
+    </div>
   );
 };
 
