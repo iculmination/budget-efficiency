@@ -149,3 +149,37 @@ export const updateUserData = async (values: FullUser) => {
 
 //   console.log("Dream Goal created:", dreamGoal);
 // };
+
+export const testData = async () => {
+  const user = await prisma.user.findUnique({
+    where: { email: "ovsiichuk.bohdan@gmail.com" },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const userId = user.id;
+
+  const transactions = Array.from({ length: 10 }, (_, i) => ({
+    userId,
+    type: i % 2 === 0 ? "income" : "expense",
+    category: i % 2 === 0 ? "Salary" : "Food",
+    source: i % 2 === 0 ? "Work" : null,
+    amount: Math.random() * 500 + 50,
+    date: new Date(),
+    description: i % 2 === 0 ? "Monthly income" : "Lunch expense",
+  }));
+
+  await prisma.transaction.createMany({ data: transactions });
+
+  // Створення 10 регулярних витрат
+  const recurringExpenses = Array.from({ length: 10 }, (_, i) => ({
+    userId,
+    name: `Subscription ${i + 1}`,
+    amount: Math.random() * 100 + 10,
+    nextPaymentDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+  }));
+
+  await prisma.recurringExpense.createMany({ data: recurringExpenses });
+};

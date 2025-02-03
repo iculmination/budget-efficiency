@@ -29,7 +29,8 @@ declare interface SettingsFormItemProps {
 
 declare interface ListProps {
   className?: string;
-  description: string;
+  description?: string;
+  type: "expenses" | "incomes" | "transactions" | "regulars";
 }
 
 declare interface DreamGoal {
@@ -49,4 +50,6 @@ declare interface FullUser {
   savings?: number | null;
   percentageGoal: number;
   dreamGoal: DreamGoal | null;
+  recurringExpenses?: RecurringExpense[];
+  transactions?: Transaction[];
 }

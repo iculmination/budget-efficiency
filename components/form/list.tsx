@@ -1,10 +1,14 @@
+"use client";
+
 import { X } from "lucide-react";
 import { Button } from "../ui/button";
 import { ScrollArea } from "../ui/scroll-area";
-import { FormDescription } from "../ui/form";
 import { ListProps } from "@/types";
+import { cn } from "@/lib/utils";
+import { useUserStore } from "@/zustand/store";
+import { RecurringExpense, Transaction } from "@prisma/client";
 
-const ListItem = () => {
+const ListItem = ({ data }: { item: RecurringExpense | Transaction }) => {
   return (
     <li className="flex w-full items-center justify-between py-2 px-4 hover:bg-gray-50/50 transition">
       <div className="flex items-center w-[93%]">
@@ -22,15 +26,39 @@ const ListItem = () => {
   );
 };
 
-const List = ({ className, description }: ListProps) => {
+const List = ({ className, description, type }: ListProps) => {
+  const transactions = useUserStore((state) => state.user?.transactions || []);
+  const recurringExpenses = useUserStore(
+    (state) => state.user?.recurringExpenses || []
+  );
+
+  const data = (() => {
+    switch (type) {
+      case "expenses":
+        return transactions.filter((el) => el.type === "expense");
+      case "incomes":
+        return transactions.filter((el) => el.type === "income");
+      case "transactions":
+        return transactions;
+      case "regulars":
+        return recurringExpenses;
+      default:
+        return [];
+    }
+  })();
+
   return (
-    <div className={className}>
-      <ScrollArea className="h-40 border rounded-lg mb-2">
+    <div className="h-full">
+      <ScrollArea className={cn("h-40 border rounded-lg mb-2", className)}>
         <ul className="w-full">
-          <ListItem />
+          {data.map((item) => (
+            <ListItem key={item.id} data={item} />
+          ))}
         </ul>
       </ScrollArea>
-      <FormDescription>{description}</FormDescription>
+      <p className="text-sm text-neutral-500 dark:text-neutral-400">
+        {description}
+      </p>
     </div>
   );
 };
