@@ -9,7 +9,13 @@ const DateComponent = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       const date = new Date();
-      setTime(`${date.getHours()}:${date.getMinutes()}`);
+      const minutes =
+        date.getMinutes() > 10 ? "0" + date.getMinutes() : date.getMinutes();
+      const hours =
+        date.getHours() > 10 ? "0" + date.getHours() : date.getHours();
+
+      const time = hours + ":" + minutes;
+      setTime(time);
     }, 60);
 
     return () => clearInterval(interval);

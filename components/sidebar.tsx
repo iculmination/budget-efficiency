@@ -6,11 +6,11 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { UserButton, useUser } from "@clerk/nextjs";
+import { Button } from "./ui/button";
 
 const Sidebar = () => {
   const pathname = usePathname();
   const user = useUser();
-
 
   return (
     <aside className="overflow-hidden w-[27.5rem]">
@@ -45,16 +45,42 @@ const Sidebar = () => {
             </ul>
           </nav>
 
-          <div className="rounded-xl bg-white w-full p-6 flex items-center gap-2 lg:gap-4">
-            <UserButton />
-            <p className="subtitle-1 text-right truncate max-w-[16rem] cursor-default">
-              Authorized as
-              <b> {user.user?.username}</b>
-            </p>
+          <div className="rounded-xl bg-white w-full p-6">
+            <h3 className="h3 mb-4">Account</h3>
+            <div className="gap-2 lg:gap-4 flex items-center">
+              <UserButton />
+              <p className="subtitle-1 text-right truncate max-w-[16rem] cursor-default">
+                Authorized as
+                <b> {user.user?.username}</b>
+              </p>
+            </div>
           </div>
-          <div className="rounded-xl bg-white w-full h-80"></div>
-          <div className="rounded-xl bg-white w-full h-80"></div>
-          <div className="rounded-xl bg-white w-full h-80"></div>
+          <div className="rounded-xl bg-white w-full p-6">
+            <h3 className="h3 mb-4">Notifications</h3>
+            <ol className="flex flex-col items-center gap-2 lg:gap-4">
+              <li className="w-full">$1200 to your goal</li>
+              <li className="w-full">16 days to salary</li>
+              <li className="w-full">Reached month expenses limit</li>
+            </ol>
+          </div>
+          <div className="rounded-xl bg-white w-full p-6">
+            <h3 className="h3 mb-4">Quick Actions</h3>
+            <div className="flex flex-col items-center gap-2 lg:gap-4">
+              <Button className="w-full">New Transaction</Button>
+              <Button className="w-full" variant="secondary">
+                Export Data
+              </Button>
+              <Button className="w-full" variant="secondary">
+                Sign Out
+              </Button>
+              <Button className="w-full" variant="destructive">
+                Delete My Account
+              </Button>
+            </div>
+          </div>
+          <div className="rounded-xl bg-white w-full p-6">
+            <h3 className="h3">&copy; 2025 All Rights Reserved</h3>
+          </div>
         </div>
       </ScrollArea>
     </aside>
