@@ -10,9 +10,9 @@ const DateComponent = () => {
     const interval = setInterval(() => {
       const date = new Date();
       const minutes =
-        date.getMinutes() > 10 ? "0" + date.getMinutes() : date.getMinutes();
+        date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
       const hours =
-        date.getHours() > 10 ? "0" + date.getHours() : date.getHours();
+        date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
 
       const time = hours + ":" + minutes;
       setTime(time);

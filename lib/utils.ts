@@ -1,4 +1,5 @@
-import { FullUser } from "@/types";
+import { FullUser, ListItemData, ListProps } from "@/types";
+import { RecurringExpense, Transaction } from "@prisma/client";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -25,4 +26,36 @@ export const transformUserData = (data: FullUser) => {
   };
 
   return { user, dreamGoal };
+};
+
+export const normalizeData = (
+  transactions: Transaction[],
+  recurringExpenses: RecurringExpense[],
+  type: ListProps["type"]
+): ListItemData[] => {
+  
+  switch (type) {
+    case "expenses":
+      return transactions
+        .filter((el) => el.type === "expense")
+        .map((el) => ({ id: el.id, type: el.type, amount: el.amount }));
+    case "incomes":
+      return transactions
+        .filter((el) => el.type === "income")
+        .map((el) => ({ id: el.id, type: el.type, amount: el.amount }));
+    case "transactions":
+      return transactions.map((el) => ({
+        id: el.id,
+        type: el.type,
+        amount: el.amount,
+      }));
+    case "regulars":
+      return recurringExpenses.map((el) => ({
+        id: el.id,
+        type: el.nextPaymentDate,
+        amount: el.amount,
+      }));
+    default:
+      return [];
+  }
 };

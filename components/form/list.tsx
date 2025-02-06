@@ -3,17 +3,16 @@
 import { X } from "lucide-react";
 import { Button } from "../ui/button";
 import { ScrollArea } from "../ui/scroll-area";
-import { ListProps } from "@/types";
-import { cn } from "@/lib/utils";
+import { ListItemData, ListProps } from "@/types";
+import { cn, normalizeData } from "@/lib/utils";
 import { useUserStore } from "@/zustand/store";
-import { RecurringExpense, Transaction } from "@prisma/client";
 
-const ListItem = ({ data }: { item: RecurringExpense | Transaction }) => {
+const ListItem = ({ data }: { data: ListItemData }) => {
   return (
     <li className="flex w-full items-center justify-between py-2 px-4 hover:bg-gray-50/50 transition">
       <div className="flex items-center w-[93%]">
         <p className="subtitle-1 w-20">200</p>
-        <p className="subtitle-1 line-clamp-1">salary</p>
+        <p className="subtitle-1 line-clamp-1">{data.amount}</p>
       </div>
       <Button
         className="size-8 hover:shadow-none"
@@ -32,20 +31,7 @@ const List = ({ className, description, type }: ListProps) => {
     (state) => state.user?.recurringExpenses || []
   );
 
-  const data = (() => {
-    switch (type) {
-      case "expenses":
-        return transactions.filter((el) => el.type === "expense");
-      case "incomes":
-        return transactions.filter((el) => el.type === "income");
-      case "transactions":
-        return transactions;
-      case "regulars":
-        return recurringExpenses;
-      default:
-        return [];
-    }
-  })();
+  const data = normalizeData(transactions, recurringExpenses, type);
 
   return (
     <div className="h-full">

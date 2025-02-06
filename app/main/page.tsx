@@ -71,7 +71,7 @@ const MainPage = () => {
           {/* <h2 className="text-lg font-bold text-gray-700">
             Recurring Payments
           </h2> */}
-          <List className="h-full" />
+          <List className="h-full" type="regulars" />
         </div>
 
         <RadarChartComponent />
@@ -79,7 +79,7 @@ const MainPage = () => {
         <TooltipChartComponent />
 
         <div className="bg-white shadow-md rounded-xl p-6 h-full">
-          <List className="h-full" />
+          <List className="h-full" type="expenses" />
         </div>
 
         {/* <div className="bg-white shadow-md rounded-xl p-6">
@@ -91,7 +91,7 @@ const MainPage = () => {
         </div> */}
 
         <div className="bg-white shadow-md rounded-xl p-6 h-full">
-          <List className="h-full" />
+          <List className="h-full" type="incomes" />
         </div>
       </div>
     </main>
