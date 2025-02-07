@@ -109,6 +109,40 @@ export const updateUserData = async (values: FullUser) => {
   }
 };
 
+export const deleteTransaction = async (id: string) => {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+
+  try {
+    await prisma.transaction.delete({ where: { userId, id } });
+
+    return { success: true, message: "Deleted successfully/" };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: "Failed to delete." };
+  }
+};
+
+export const deleteRecurringExpense = async (id: string) => {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+
+  try {
+    await prisma.recurringExpense.delete({ where: { userId, id } });
+
+    return { success: true, message: "Deleted successfully/" };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: "Failed to delete." };
+  }
+};
+
 // export const testData = async () => {
 //   const user = await prisma.user.create({
 //     data: {
@@ -150,36 +184,35 @@ export const updateUserData = async (values: FullUser) => {
 //   console.log("Dream Goal created:", dreamGoal);
 // };
 
-export const testData = async () => {
-  const user = await prisma.user.findUnique({
-    where: { email: "ovsiichuk.bohdan@gmail.com" },
-  });
+// export const testData = async () => {
+//   const user = await prisma.user.findUnique({
+//     where: { email: "ovsiichuk.bohdan@gmail.com" },
+//   });
 
-  if (!user) {
-    throw new Error("User not found");
-  }
+//   if (!user) {
+//     throw new Error("User not found");
+//   }
 
-  const userId = user.id;
+//   const userId = user.id;
 
-  const transactions = Array.from({ length: 10 }, (_, i) => ({
-    userId,
-    type: i % 2 === 0 ? "income" : "expense",
-    category: i % 2 === 0 ? "Salary" : "Food",
-    source: i % 2 === 0 ? "Work" : null,
-    amount: Math.random() * 500 + 50,
-    date: new Date(),
-    description: i % 2 === 0 ? "Monthly income" : "Lunch expense",
-  }));
+//   const transactions = Array.from({ length: 10 }, (_, i) => ({
+//     userId,
+//     type: i % 2 === 0 ? "income" : "expense",
+//     category: i % 2 === 0 ? "Salary" : "Food",
+//     source: i % 2 === 0 ? "Work" : "Binance",
+//     amount: Math.random() * 500 + 50,
+//     date: new Date(),
+//     description: i % 2 === 0 ? "Monthly income" : "Lunch expense",
+//   }));
 
-  await prisma.transaction.createMany({ data: transactions });
+//   await prisma.transaction.createMany({ data: transactions });
 
-  // Створення 10 регулярних витрат
-  const recurringExpenses = Array.from({ length: 10 }, (_, i) => ({
-    userId,
-    name: `Subscription ${i + 1}`,
-    amount: Math.random() * 100 + 10,
-    nextPaymentDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),
-  }));
+//   const recurringExpenses = Array.from({ length: 10 }, (_, i) => ({
+//     userId,
+//     name: `Subscription ${i + 1}`,
+//     amount: Math.random() * 100 + 10,
+//     nextPaymentDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+//   }));
 
-  await prisma.recurringExpense.createMany({ data: recurringExpenses });
-};
+//   await prisma.recurringExpense.createMany({ data: recurringExpenses });
+// };

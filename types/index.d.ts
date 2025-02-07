@@ -53,9 +53,3 @@ declare interface FullUser {
   recurringExpenses?: RecurringExpense[];
   transactions?: Transaction[];
 }
-
-declare interface ListItemData {
-  id: string;
-  type: string | Date;
-  amount: number;
-}

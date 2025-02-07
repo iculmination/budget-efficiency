@@ -150,9 +150,18 @@ const Settings = () => {
                 type="number"
                 description="This is your actual savings."
               />
-              <List description="Here is a list of your outgoings." />
-              <List description="Here is a list of your incomes." />
-              <List description="Here is a list of your regular payments." />
+              <List
+                description="Here is a list of your outgoings."
+                type="expenses"
+              />
+              <List
+                description="Here is a list of your incomes."
+                type="incomes"
+              />
+              <List
+                description="Here is a list of your regular payments."
+                type="regulars"
+              />
             </div>
             <SubmitButton isSubmitting={isSubmitting} />
           </div>
