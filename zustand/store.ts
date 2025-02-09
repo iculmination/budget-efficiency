@@ -9,7 +9,7 @@ interface UserState {
 }
 
 export const useUserStore = create<UserState>((set) => ({
-  user: null,
+  user: null, 
   setUser: (userData) => set({ user: userData }),
   removeTransaction: (transactionId: string) =>
     set((state) => {
@@ -28,13 +28,13 @@ export const useUserStore = create<UserState>((set) => ({
     }),
   removeRecurringExpense: (recurringExpenseId: string) =>
     set((state) => {
-      if (!state.user || !state.user?.transactions) {
+      if (!state.user || !state.user?.recurringExpenses) {
         return state;
       }
       return {
         user: {
           ...state.user,
-          recurringExpenses: state.user.transactions.filter(
+          recurringExpenses: state.user.recurringExpenses.filter(
             (re) => re.id !== recurringExpenseId
           ),
           ...state.user.transactions,

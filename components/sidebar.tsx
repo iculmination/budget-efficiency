@@ -5,8 +5,20 @@ import { ScrollArea } from "./ui/scroll-area";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
-import { UserButton, useUser } from "@clerk/nextjs";
+import { SignOutButton, UserButton, useUser } from "@clerk/nextjs";
 import { Button } from "./ui/button";
+import CreateTransaction from "./create-transaction";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { deleteAccount } from "@/lib/actions/user.actions";
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -66,16 +78,37 @@ const Sidebar = () => {
           <div className="rounded-xl bg-white w-full p-6">
             <h3 className="h3 mb-4">Quick Actions</h3>
             <div className="flex flex-col items-center gap-2 lg:gap-4">
-              <Button className="w-full">New Transaction</Button>
+              <CreateTransaction>
+                <Button className="w-full">New Transaction</Button>
+              </CreateTransaction>
               <Button className="w-full" variant="secondary">
                 Export Data
               </Button>
-              <Button className="w-full" variant="secondary">
-                Sign Out
+              <Button className="w-full" variant="secondary" asChild>
+                <SignOutButton>Sign Out</SignOutButton>
               </Button>
-              <Button className="w-full" variant="destructive">
-                Delete My Account
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="w-full" variant="destructive">
+                    Delete My Account
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Are you absolutely sure?</DialogTitle>
+                    <DialogDescription>
+                      This action cannot be undone. This will permanently delete
+                      your account and remove your data from our servers.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button variant="destructive">Cancel</Button>
+                    </DialogClose>
+                    <Button onClick={deleteAccount}>I&apos;m sure</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
           <div className="rounded-xl bg-white w-full p-6">

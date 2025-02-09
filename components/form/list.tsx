@@ -15,9 +15,11 @@ import { currencies } from "@/constants";
 const TransactionListItem = ({
   data,
   currency,
+  simplified,
 }: {
   data: Transaction;
   currency: string;
+  simplified?: boolean;
 }) => {
   const { toast } = useToast();
   const removeTransaction = useUserStore((state) => state.removeTransaction);
@@ -32,20 +34,43 @@ const TransactionListItem = ({
     }
   };
 
+  const isIncome = data.type === "income";
+
   return (
     <li
       className={cn(
         "flex w-full items-center justify-between py-2 px-4 hover:bg-gray-50/50 transition",
-        data.type === "income" ? "hover:bg-green-50" : "hover:bg-red-50"
+        isIncome ? "hover:bg-green-50" : "hover:bg-red-50"
       )}
     >
       <div className="flex items-center w-[93%]">
-        <p className="subtitle-1 w-20 truncate mr-2">{data.source}</p>
-        <p className="subtitle-1 line-clamp-1">
+        <p className="subtitle-1 w-20 truncate mr-2 capitalize">
+          {data.category}
+        </p>
+        <p
+          className={cn(
+            "subtitle-1 line-clamp-1 w-24",
+            isIncome ? "text-green-700" : "text-red-700"
+          )}
+        >
+          {isIncome ? "+ " : "- "}
           {currency}
           {data.amount.toFixed(2)}
         </p>
-      </div>
+        {!simplified && (
+          <>
+            <p className="subtitle-1 w-28 truncate mr-2">
+              {data.date.toLocaleDateString()}
+            </p>
+            <p className="subtitle-1 w-20 truncate mr-2 capitalize">
+              {isIncome && data.source}
+            </p>
+            <p className="subtitle-1 w-40 truncate mr-2 capitalize">
+              {data.description}
+            </p>
+          </>
+        )}
+      </div>{" "}
       <Button
         onClick={() => handleTransactionDelete()}
         className="size-8 hover:shadow-none hover:bg-transparent hover:text-red-500"
@@ -61,9 +86,11 @@ const TransactionListItem = ({
 const RecurringExpenseListItem = ({
   data,
   currency,
+  simplified,
 }: {
   data: RecurringExpense;
   currency: string;
+  simplified?: boolean;
 }) => {
   const { toast } = useToast();
   const removeRecurringExpense = useUserStore(
@@ -81,16 +108,35 @@ const RecurringExpenseListItem = ({
   };
 
   return (
-    <li className="flex w-full items-center justify-between py-2 px-4 hover:bg-red-50 transition">
+    <li
+      className={cn(
+        "flex w-full items-center justify-between py-2 px-4 hover:bg-gray-50/50 transition",
+        "hover:bg-red-50"
+      )}
+    >
       <div className="flex items-center w-[93%]">
-        <p className="subtitle-1 w-20 truncate mr-2">{data.name}</p>
-        <p className="subtitle-1 line-clamp-1">
-          {currency}
+        <p
+          className={cn(
+            "subtitle-1 w-40 truncate mr-2 capitalize",
+            simplified && "w-20"
+          )}
+        >
+          {data.name}
+        </p>
+        <p className="subtitle-1 line-clamp-1 w-24 text-red-700">
+          - {currency}
           {data.amount.toFixed(2)}
         </p>
+        {!simplified && (
+          <>
+            <p className="subtitle-1 w-28 truncate mr-2">
+              {new Date(data.nextPaymentDate).toLocaleDateString()}
+            </p>
+          </>
+        )}
       </div>
       <Button
-        onClick={() => handleRecurringExpenseDelete()}
+        onClick={handleRecurringExpenseDelete}
         className="size-8 hover:shadow-none hover:bg-transparent hover:text-red-500"
         variant="ghost"
         type="button"
@@ -101,7 +147,14 @@ const RecurringExpenseListItem = ({
   );
 };
 
-export const List = ({ className, description, type }: ListProps) => {
+export default RecurringExpenseListItem;
+
+export const List = ({
+  className,
+  description,
+  type,
+  simplified,
+}: ListProps) => {
   const user = useUserStore((state) => state.user);
 
   const data = useMemo(
@@ -129,12 +182,14 @@ export const List = ({ className, description, type }: ListProps) => {
                 key={item.id}
                 data={item}
                 currency={currency}
+                simplified={simplified}
               />
             ) : (
               <RecurringExpenseListItem
                 key={item.id}
                 data={item}
                 currency={currency}
+                simplified={simplified}
               />
             )
           )}

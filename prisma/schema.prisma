@@ -52,7 +52,7 @@ model Transaction {
   userId      String
   type        String
   category    String
-  source      String
+  source      String?
   amount      Float
   date        DateTime
   description String?

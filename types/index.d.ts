@@ -31,6 +31,7 @@ declare interface ListProps {
   className?: string;
   description?: string;
   type: "expenses" | "incomes" | "transactions" | "regulars";
+  simplified?: boolean;
 }
 
 declare interface DreamGoal {
@@ -52,4 +53,9 @@ declare interface FullUser {
   dreamGoal: DreamGoal | null;
   recurringExpenses?: RecurringExpense[];
   transactions?: Transaction[];
+}
+
+declare interface CreateTransactionProps {
+  children: React.ReactNode;
+  className?: string;
 }

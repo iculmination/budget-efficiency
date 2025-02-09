@@ -143,6 +143,83 @@ export const deleteRecurringExpense = async (id: string) => {
   }
 };
 
+export const createTransaction = async (data: {
+  type: string;
+  category: string;
+  amount: number;
+  description?: string;
+  source?: string;
+}) => {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+  console.log(data);
+  try {
+    await prisma.transaction.create({
+      data: {
+        ...data,
+        userId,
+        date: new Date(),
+        category: data.category.toLowerCase(),
+        source: data.source?.toLowerCase() || null,
+      },
+    });
+
+    return { success: true, message: "Created successfully." };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: "Failed to create." };
+  }
+};
+
+export const createRecurringExpense = async (data: {
+  name: string;
+  amount: number;
+  nextPaymentDate: Date;
+}) => {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+
+  try {
+    await prisma.recurringExpense.create({
+      data: {
+        ...data,
+        userId,
+      },
+    });
+
+    return {
+      success: true,
+      message: "Recurring expense created successfully.",
+    };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: "Failed to create recurring expense." };
+  }
+};
+
+export const deleteAccount = async () => {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+
+  try {
+    await prisma.user.delete({ where: { id: userId } });
+
+    return { success: true, message: "Created successfully." };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: "Failed to create." };
+  }
+};
+
 // export const testData = async () => {
 //   const user = await prisma.user.create({
 //     data: {

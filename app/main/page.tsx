@@ -40,18 +40,18 @@ const MainPage = () => {
         <LineChartComponent />
 
         <div className="bg-white shadow-md rounded-xl row-span-2 p-6">
-          <List className="h-full" type="regulars" />
+          <List className="h-full" type="regulars" simplified />
         </div>
 
         <RadarChartComponent />
         <TooltipChartComponent />
 
         <div className="bg-white shadow-md rounded-xl p-6 h-full">
-          <List className="h-full" type="expenses" />
+          <List className="h-full" type="expenses" simplified />
         </div>
 
         <div className="bg-white shadow-md rounded-xl p-6 h-full">
-          <List className="h-full" type="incomes" />
+          <List className="h-full" type="incomes" simplified />
         </div>
       </div>
     </main>
