@@ -1,4 +1,4 @@
-import { seedTestData } from "@/lib/actions/user.actions";
+// import { seedTestData } from "@/lib/actions/user.actions";
 
 const Savings = () => {
   // seedTestData();
