@@ -9,6 +9,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { ScrollArea } from "../ui/scroll-area";
 const chartData = [
   { month: "January", desktop: 186 },
   { month: "February", desktop: 305 },
@@ -27,7 +28,7 @@ const chartConfig = {
 
 export function LineChartComponent() {
   return (
-    <div className="bg-white shadow-md rounded-xl p-6">
+    <ScrollArea className="bg-white shadow-md rounded-xl p-6">
       <CardHeader>
         <CardTitle>Line Chart</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
@@ -64,6 +65,6 @@ export function LineChartComponent() {
           </LineChart>
         </ChartContainer>
       </div>
-    </div>
+    </ScrollArea>
   );
 }

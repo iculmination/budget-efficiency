@@ -10,6 +10,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { ScrollArea } from "../ui/scroll-area";
 const chartData = [
   { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
   { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
@@ -50,7 +51,7 @@ export function PieChartComponent() {
   }, []);
 
   return (
-    <div className="bg-white shadow-md rounded-xl p-6">
+    <ScrollArea className="bg-white shadow-md rounded-xl p-6">
       <CardHeader className="items-center pb-0">
         <CardTitle>Pie Chart - Donut with Text</CardTitle>
       </CardHeader>
@@ -104,6 +105,6 @@ export function PieChartComponent() {
           </PieChart>
         </ChartContainer>
       </CardContent>
-    </div>
+    </ScrollArea>
   );
 }

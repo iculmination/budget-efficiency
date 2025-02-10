@@ -9,6 +9,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { ScrollArea } from "../ui/scroll-area";
 const chartData = [
   { date: "2024-04-01", outgoings: 222, incomes: 150 },
   { date: "2024-04-02", outgoings: 97, incomes: 180 },
@@ -130,7 +131,7 @@ export function BarChartComponent() {
   );
 
   return (
-    <div className="bg-white shadow-md rounded-xl col-span-3 p-6">
+    <ScrollArea className="bg-white shadow-md rounded-xl col-span-3 p-6">
       <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
           <CardTitle>Bar Chart - Interactive</CardTitle>
@@ -206,6 +207,6 @@ export function BarChartComponent() {
           </BarChart>
         </ChartContainer>
       </div>
-    </div>
+    </ScrollArea>
   );
 }

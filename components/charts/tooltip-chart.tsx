@@ -9,6 +9,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { ScrollArea } from "../ui/scroll-area";
 const chartData = [
   { date: "2024-07-15", running: 450, swimming: 300 },
   { date: "2024-07-16", running: 380, swimming: 420 },
@@ -31,7 +32,7 @@ const chartConfig = {
 
 export function TooltipChartComponent() {
   return (
-    <div className="bg-white shadow-md rounded-xl col-span-2 p-6">
+    <ScrollArea className="bg-white shadow-md rounded-xl col-span-2 p-6">
       <CardHeader>
         <CardTitle>Tooltip - Default</CardTitle>
         <CardDescription>
@@ -72,6 +73,6 @@ export function TooltipChartComponent() {
           </BarChart>
         </ChartContainer>
       </div>
-    </div>
+    </ScrollArea>
   );
 }

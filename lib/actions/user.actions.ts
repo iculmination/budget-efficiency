@@ -293,3 +293,100 @@ export const deleteAccount = async () => {
 
 //   await prisma.recurringExpense.createMany({ data: recurringExpenses });
 // };
+
+export const seedTestData = async () => {
+  try {
+    const email = "myxajlo.matjushhenko@kitu.nau.edu.ua";
+
+    // Перевіряємо, чи є такий користувач
+    let user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    // Якщо користувач не існує, створюємо нового
+    if (!user) {
+      user = await prisma.user.create({
+        data: {
+          id: "user_2srNGQxn67mfy3E4ImbJeoWyYb3",
+          username: "Mykhajlo Matjushhenko",
+          email,
+          age: 25,
+          currency: "USD",
+          income: 5000,
+          savings: 1000,
+          percentageGoal: 10,
+        },
+      });
+    }
+
+    const userId = user.id;
+
+    // Додаємо тестову мрію (DreamGoal)
+    await prisma.dreamGoal.create({
+      data: {
+        userId,
+        name: "Buy a Tesla",
+        sum: 50000,
+        progress: 5000,
+        date: new Date("2026-01-01"),
+      },
+    });
+
+    // Додаємо повторювані витрати (RecurringExpense)
+    await prisma.recurringExpense.createMany({
+      data: [
+        {
+          userId,
+          name: "Netflix Subscription",
+          amount: 10.99,
+          nextPaymentDate: new Date("2025-03-01"),
+        },
+        {
+          userId,
+          name: "Gym Membership",
+          amount: 30.0,
+          nextPaymentDate: new Date("2025-02-15"),
+        },
+      ],
+    });
+
+    // Додаємо тестові транзакції (Transaction)
+    await prisma.transaction.createMany({
+      data: [
+        {
+          userId,
+          type: "income",
+          category: "Salary",
+          source: "Company XYZ",
+          amount: 5000,
+          date: new Date(),
+          description: "Monthly salary payment",
+        },
+        {
+          userId,
+          type: "expense",
+          category: "Food",
+          source: null,
+          amount: 50.25,
+          date: new Date(),
+          description: "Grocery shopping",
+        },
+        {
+          userId,
+          type: "expense",
+          category: "Entertainment",
+          source: null,
+          amount: 15.99,
+          date: new Date(),
+          description: "Cinema ticket",
+        },
+      ],
+    });
+
+    console.log("Test data added successfully!");
+  } catch (error) {
+    console.error("Error adding test data:", error);
+  } finally {
+    await prisma.$disconnect();
+  }
+};

@@ -26,7 +26,7 @@ const Sidebar = () => {
 
   return (
     <aside className="overflow-hidden w-[27.5rem]">
-      <ScrollArea className="hidden w-full h-screen p-3 lg:block">
+      <ScrollArea className="hidden w-full p-3 lg:block">
         <div className="flex flex-col gap-2 drop-shadow-md">
           <nav className="">
             <ul className="rounded-xl bg-white w-full p-4">

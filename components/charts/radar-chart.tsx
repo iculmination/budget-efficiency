@@ -9,6 +9,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { ScrollArea } from "../ui/scroll-area";
 const chartData = [
   { month: "January", desktop: 186 },
   { month: "February", desktop: 285 },
@@ -27,7 +28,7 @@ const chartConfig = {
 
 export function RadarChartComponent() {
   return (
-    <div className="bg-white shadow-md rounded-xl p-6">
+    <ScrollArea className="bg-white shadow-md rounded-xl p-6">
       <CardHeader className="items-center pb-4">
         <CardTitle>Radar Chart - Grid Filled</CardTitle>
       </CardHeader>
@@ -51,6 +52,6 @@ export function RadarChartComponent() {
           </RadarChart>
         </ChartContainer>
       </CardContent>
-    </div>
+    </ScrollArea>
   );
 }
