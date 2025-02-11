@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const RootPage = () => {
   return (
-    <div className="flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-blue-200 text-gray-800">
+    <div className="flex flex-col w-full h-full items-center justify-center bg-gradient-to-br from-blue-50 to-blue-200 text-gray-800">
       <header className="absolute top-6 left-10">
         <h2 className="text-2xl font-bold tracking-tight cursor-default">
           <span className="text-blue-600 cursor-default">Budget</span>Master

@@ -11,17 +11,17 @@ import {
 } from "@/components/ui/chart";
 import { ScrollArea } from "../ui/scroll-area";
 const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
+  { month: "January", budget: 1186 },
+  { month: "February", budget: 1305 },
+  { month: "March", budget: 1237 },
+  { month: "April", budget: 473 },
+  { month: "May", budget: 1209 },
+  { month: "June", budget: 1214 },
 ];
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  budget: {
+    label: "Budget",
     color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
@@ -30,7 +30,7 @@ export function LineChartComponent() {
   return (
     <ScrollArea className="bg-white shadow-md rounded-xl p-6">
       <CardHeader>
-        <CardTitle>Line Chart</CardTitle>
+        <CardTitle>Your savings</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <div>
@@ -56,9 +56,9 @@ export function LineChartComponent() {
               content={<ChartTooltipContent hideLabel />}
             />
             <Line
-              dataKey="desktop"
+              dataKey="budget"
               type="natural"
-              stroke="var(--color-desktop)"
+              stroke="blue"
               strokeWidth={2}
               dot={false}
             />

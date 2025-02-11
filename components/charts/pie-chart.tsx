@@ -11,49 +11,40 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { ScrollArea } from "../ui/scroll-area";
-const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", visitors: 287, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 190, fill: "var(--color-other)" },
-];
+import { RecurringExpense } from "@prisma/client";
 
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  chrome: {
-    label: "Chrome",
-    color: "hsl(var(--chart-1))",
-  },
-  safari: {
-    label: "Safari",
-    color: "hsl(var(--chart-2))",
-  },
-  firefox: {
-    label: "Firefox",
-    color: "hsl(var(--chart-3))",
-  },
-  edge: {
-    label: "Edge",
-    color: "hsl(var(--chart-4))",
-  },
-  other: {
-    label: "Other",
-    color: "hsl(var(--chart-5))",
+  amount: {
+    label: "Amount",
   },
 } satisfies ChartConfig;
 
-export function PieChartComponent() {
-  const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
-  }, []);
+export function PieChartComponent({
+  regulars,
+}: {
+  regulars: RecurringExpense[] | undefined;
+}) {
+  const gerRandomColor = () => {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  };
+
+  const chartData = regulars?.map((item) => ({
+    name: item.name,
+    amount: item.amount,
+    fill: gerRandomColor(),
+  }));
+
+  console.log(chartData);
 
   return (
     <ScrollArea className="bg-white shadow-md rounded-xl p-6">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Pie Chart - Donut with Text</CardTitle>
+        <CardTitle>Regular Expenses</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -67,8 +58,8 @@ export function PieChartComponent() {
             />
             <Pie
               data={chartData}
-              dataKey="visitors"
-              nameKey="browser"
+              dataKey="amount"
+              nameKey="name"
               innerRadius={60}
               strokeWidth={5}
             >
@@ -87,14 +78,14 @@ export function PieChartComponent() {
                           y={viewBox.cy}
                           className="fill-foreground text-3xl font-bold"
                         >
-                          {totalVisitors.toLocaleString()}
+                          {regulars?.length.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Visitors
+                          Subscriptions
                         </tspan>
                       </text>
                     );

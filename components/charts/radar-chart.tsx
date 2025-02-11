@@ -10,27 +10,41 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { ScrollArea } from "../ui/scroll-area";
-const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 285 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 203 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 264 },
-];
+import { Transaction } from "@prisma/client";
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  expenses: {
+    label: "Expenses",
     color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
 
-export function RadarChartComponent() {
+export function RadarChartComponent({
+  transactions,
+}: {
+  transactions: Transaction[] | undefined;
+}) {
+  if (!transactions) return null;
+
+  const chartData = Object.values(
+    transactions.reduce((acc, transaction) => {
+      if (transaction.type !== "expense") return acc;
+      const category = transaction.category.toLowerCase();
+
+      if (!acc[category]) {
+        acc[category] = { category, expenses: 0 };
+      }
+
+      acc[category].expenses += transaction.amount;
+
+      return acc;
+    }, {} as Record<string, { category: string; expenses: number }>)
+  );
+
   return (
     <ScrollArea className="bg-white shadow-md rounded-xl p-6">
       <CardHeader className="items-center pb-4">
-        <CardTitle>Radar Chart - Grid Filled</CardTitle>
+        <CardTitle>Expenses categories</CardTitle>
       </CardHeader>
       <CardContent className="pb-0">
         <ChartContainer
@@ -43,9 +57,9 @@ export function RadarChartComponent() {
               content={<ChartTooltipContent hideLabel />}
             />
             <PolarGrid className="fill-[--color-desktop] opacity-20" />
-            <PolarAngleAxis dataKey="month" />
+            <PolarAngleAxis dataKey="category" />
             <Radar
-              dataKey="desktop"
+              dataKey="expenses"
               fill="var(--color-desktop)"
               fillOpacity={0.5}
             />

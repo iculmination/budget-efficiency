@@ -18,10 +18,8 @@ const MainPage = () => {
     return <Loading />;
   }
 
-  // eslint-disable-next-line
-  const currency = currencies.find(
-    (cur) => cur.code === data.currency
-  )?.symbol_native;
+  const currency =
+    currencies.find((cur) => cur.code === data.currency)?.symbol_native || "";
 
   return (
     <main className="w-full h-full">
@@ -35,16 +33,16 @@ const MainPage = () => {
         <div className="p-6"></div>
         <div className="p-6"></div>
 
-        <BarChartComponent />
-        <PieChartComponent />
+        <BarChartComponent data={data} currency={currency} />
+        <PieChartComponent regulars={data.recurringExpenses} />
         <LineChartComponent />
 
         <div className="bg-white shadow-md rounded-xl row-span-2 p-6">
           <List className="h-full" type="regulars" simplified />
         </div>
 
-        <RadarChartComponent />
-        <TooltipChartComponent />
+        <RadarChartComponent transactions={data.transactions} />
+        <TooltipChartComponent data={data} currency={currency} />
 
         <div className="bg-white shadow-md rounded-xl p-6 h-full">
           <List className="h-full" type="expenses" simplified />

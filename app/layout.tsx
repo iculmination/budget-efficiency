@@ -19,7 +19,7 @@ export default function RootLayout({ children }: LayoutProps) {
     <ClerkProvider>
       <html lang="en">
         <body
-          className={`${rubikSans.variable} antialiased bg-gradient-to-br from-blue-50 to-blue-100 w-[2560px] h-[1440px]`}
+          className={`${rubikSans.variable} antialiased bg-gradient-to-br from-blue-50 to-blue-100 w-[2840px] h-[1432px]`}
         >
           {children}
         </body>
